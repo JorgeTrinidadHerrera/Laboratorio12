@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Laboratorio12.Views.TaksView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label FontSize="Title">Title</Label>
+            <Entry FontSize="Title" Placeholder="Title"
+                   Text="{Binding Title}"></Entry>
+            <Label FontSize="Title">Desc</Label>
+            <Entry FontSize="Title" Placeholder="Desc"
+                   Text="{Binding Description}"></Entry>
+            <Label FontSize="Title">Title</Label>
+            <Entry FontSize="Title" Placeholder="Status"
+                   Text="{Binding Status}"></Entry>
+            <Button Font="Title" Text="Grabar"
+                    Command="{Binding Save}"></Button>
+            <Button Font="Title" Text="Listar"
+                    Command="{Binding Get}"></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
