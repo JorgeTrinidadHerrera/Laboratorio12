@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: notification+utp
+  description: notificaciones
+  tags:
+    - openapi
+    - users
+spec:
+  type: openapi
+  lifecycle: production
+  owner: equipo-backend
+  definition:
+    $text: https://raw.githubusercontent.com/JorgeTrinidadHerrera/Laboratorio12/refs/heads/master/openapi.yaml
