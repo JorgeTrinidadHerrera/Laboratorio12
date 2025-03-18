@@ -1,0 +1,165 @@
+openapi: 3.0.1
+info:
+  title: UTP+Notification
+  description: Servicio de notificaciones para la suite UTP+
+  version: "1.0.0"
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/UTP-Xpedition/UTP-A276-AG-DEV-01-Notification/1.0.0
+  - url: "https://{server}/{stage}"
+    description: Endpoint de la API del servicio de notificaciones
+    variables:
+      server:
+        default: mstupn15eh.execute-api.us-east-1.amazonaws.com
+        enum:
+          - mstupn15eh.execute-api.us-east-1.amazonaws.com
+      stage:
+        default: dev
+        enum:
+          - dev
+paths:
+  /:
+    post:
+      tags:
+        - send-mail
+      summary: Enviar correo
+      description: Enviar correo usando los parámetros requeridos
+      operationId: sendMail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMailRequest'
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineResponse200'
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Solicitud inválida
+        "401":
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: No autorizado
+        "403":
+          description: Prohibido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Prohibido
+        "404":
+          description: No encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: No encontrado
+      security:
+        - user-id: []
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:792654060327:function:UTP-A276-LA-DEV-01-Notification-GetBody"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+        requestTemplates:
+          application/json: |
+            {
+              "body": $input.json('$')
+            }
+        type: "aws_proxy"
+components:
+  schemas:
+    Error:
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de error
+          example: No está autorizado para realizar esta acción.
+        detail:
+          type: object
+          description: Detalle del error
+      description: Un objeto de respuesta de error
+    Attachment:
+      type: object
+      properties:
+        filename:
+          type: string
+          example: documento.txt
+        content:
+          type: string
+          format: base64
+          example: UGVyZmlsIGRvY3VtZW50byBlbiBiYXNlNjQ=
+    InlineResponse200:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Correo enviado exitosamente
+    SendMailRequest:
+      type: object
+      properties:
+        from_address:
+          type: string
+          description: Dirección de correo del remitente
+          example: no-reply@utp.edu.pe
+        to_addresses:
+          type: array
+          items:
+            type: string
+          description: Lista de direcciones de correo de los destinatarios
+          example:
+            - jrojascu@utp.edu.pe
+        cc_addresses:
+          type: array
+          items:
+            type: string
+          description: Lista de direcciones de correo en copia (CC)
+          example:
+            - jrojascu@utp.edu.pe
+        bcc_addresses:
+          type: array
+          items:
+            type: string
+          description: Lista de direcciones de correo en copia oculta (BCC)
+          example:
+            - jrojascu@utp.edu.pe
+        subject:
+          type: string
+          description: Asunto del correo electrónico
+          example: UTP+Notification - Pruebas en DEV
+        message:
+          type: string
+          description: Contenido del mensaje del correo electrónico
+          example: <h1>Esta es una prueba desde la API de UTP+Notification.</h1>
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+  securitySchemes:
+    user-id:
+      type: apiKey
+      name: x-api-key
+      in: header
