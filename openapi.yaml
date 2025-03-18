@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: UTP+Notification
+  title: UTP-Notification
   description: Servicio de notificaciones para la suite UTP+
   version: "1.0.0"
 servers:
